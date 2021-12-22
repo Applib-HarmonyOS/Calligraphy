@@ -1,14 +1,25 @@
 package io.github.inflationx.calligraphy3;
 
-import android.util.Log;
+import ohos.hiviewdfx.HiLog;
+import ohos.hiviewdfx.HiLogLabel;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 class ReflectionUtils {
 
-    private static final String TAG = ReflectionUtils.class.getSimpleName();
+    /**
+     * TYPE.
+     */
+    private static final int HILOG_TYPE = 3;
+    /**
+     * DOMAIN.
+     */
+    private static final int HILOG_DOMAIN = 0xD000F00;
+    /**
+     * LABEL.
+     */
+    private static final HiLogLabel LABEL = new HiLogLabel(HILOG_TYPE, HILOG_DOMAIN, "Calligraphy");
 
     static Method getMethod(Class clazz, String methodName) {
         final Method[] methods = clazz.getMethods();
@@ -23,12 +34,14 @@ class ReflectionUtils {
 
     static void invokeMethod(Object object, Method method, Object... args) {
         try {
-            if (method == null) return;
+            if (method == null) {
+                return;
+            }
             method.invoke(object, args);
         } catch (IllegalAccessException e) {
-            Log.d(TAG, "Can't access method using reflection", e);
+            HiLog.error(LABEL, e.getMessage());
         } catch (InvocationTargetException e) {
-            Log.d(TAG, "Can't invoke method using reflection", e);
+            HiLog.error(LABEL, e.getMessage());
         }
     }
 }
